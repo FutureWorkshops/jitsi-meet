@@ -18,9 +18,7 @@ import { connect } from '../../../base/redux';
 import { StyleType } from '../../../base/styles';
 import { getTrackByMediaTypeAndParticipant } from '../../../base/tracks';
 import { ConnectionIndicator } from '../../../connection-indicator';
-import { DisplayNameLabel } from '../../../display-name';
 import { RemoteVideoMenu } from '../../../remote-video-menu';
-import { toggleToolboxVisible } from '../../../toolbox';
 
 import AudioMutedIndicator from './AudioMutedIndicator';
 import DominantSpeakerIndicator from './DominantSpeakerIndicator';
@@ -124,9 +122,7 @@ class Thumbnail extends Component<Props> {
             _styles,
             _videoTrack: videoTrack,
             disableTint,
-            participant,
-            renderDisplayName,
-            tileView
+            participant
         } = this.props;
 
         // We don't render audio in any of the following:
@@ -138,8 +134,7 @@ class Thumbnail extends Component<Props> {
         const audioMuted = !audioTrack || audioTrack.muted;
         const renderAudio = !audioMuted && !audioTrack.local;
         const participantId = participant.id;
-        const participantInLargeVideo
-            = participantId === largeVideo.participantId;
+        const participantInLargeVideo = participantId === largeVideo.participantId;
         const videoMuted = !videoTrack || videoTrack.muted;
         const isScreenShare = videoTrack && videoTrack.videoType === VIDEO_TYPE.DESKTOP;
 
@@ -149,19 +144,15 @@ class Thumbnail extends Component<Props> {
                 onLongPress = { participant.local ? undefined : _onShowRemoteVideoMenu }
                 style = { [
                     styles.thumbnail,
-                    participant.pinned && !tileView
-                        ? _styles.thumbnailPinned : null,
+                    participant.pinned && _styles.thumbnailPinned,
                     this.props.styleOverrides || null
                 ] }
                 touchFeedback = { false }>
-
-                { renderAudio
-                    && <Audio
-                        stream
-                            = { audioTrack.jitsiTrack.getOriginalStream() } /> }
+                {renderAudio && <Audio stream = { audioTrack.jitsiTrack.getOriginalStream() } />}
 
                 <ParticipantView
                     avatarSize = { AVATAR_SIZE }
+                    defaultLogo = { false }
                     disableVideo = { isScreenShare }
                     participantId = { participantId }
                     style = { _styles.participantViewStyle }
@@ -169,12 +160,11 @@ class Thumbnail extends Component<Props> {
                     tintStyle = { _styles.activeThumbnailTint }
                     zOrder = { 1 } />
 
-                { renderDisplayName && <DisplayNameLabel participantId = { participantId } /> }
-
-                { !_isEveryoneModerator && participant.role === PARTICIPANT_ROLE.MODERATOR
-                    && <View style = { styles.moderatorIndicatorContainer }>
+                { !_isEveryoneModerator && participant.role === PARTICIPANT_ROLE.MODERATOR && (
+                    <View style = { styles.moderatorIndicatorContainer }>
                         <ModeratorIndicator />
-                    </View> }
+                    </View>
+                )}
 
                 <View
                     style = { [
@@ -182,8 +172,7 @@ class Thumbnail extends Component<Props> {
                         styles.thumbnailTopLeftIndicatorContainer
                     ] }>
                     <RaisedHandIndicator participantId = { participant.id } />
-                    { participant.dominantSpeaker
-                        && <DominantSpeakerIndicator /> }
+                    {participant.dominantSpeaker && <DominantSpeakerIndicator />}
                 </View>
 
                 <View
@@ -195,13 +184,10 @@ class Thumbnail extends Component<Props> {
                 </View>
 
                 <Container style = { styles.thumbnailIndicatorContainer }>
-                    { audioMuted
-                        && <AudioMutedIndicator /> }
+                    {audioMuted && <AudioMutedIndicator />}
 
-                    { videoMuted
-                        && <VideoMutedIndicator /> }
+                    {videoMuted && <VideoMutedIndicator />}
                 </Container>
-
             </Container>
         );
     }
@@ -226,13 +212,9 @@ function _mapDispatchToProps(dispatch: Function, ownProps): Object {
          * @returns {void}
          */
         _onClick() {
-            const { participant, tileView } = ownProps;
+            const { participant } = ownProps;
 
-            if (tileView) {
-                dispatch(toggleToolboxVisible());
-            } else {
-                dispatch(pinParticipant(participant.pinned ? null : participant.id));
-            }
+            dispatch(pinParticipant(participant.pinned ? null : participant.id));
         },
 
         /**
@@ -243,9 +225,11 @@ function _mapDispatchToProps(dispatch: Function, ownProps): Object {
         _onShowRemoteVideoMenu() {
             const { participant } = ownProps;
 
-            dispatch(openDialog(RemoteVideoMenu, {
-                participant
-            }));
+            dispatch(
+                openDialog(RemoteVideoMenu, {
+                    participant
+                })
+            );
         }
     };
 }
@@ -269,10 +253,8 @@ function _mapStateToProps(state, ownProps) {
     const largeVideo = state['features/large-video'];
     const tracks = state['features/base/tracks'];
     const id = ownProps.participant.id;
-    const audioTrack
-        = getTrackByMediaTypeAndParticipant(tracks, MEDIA_TYPE.AUDIO, id);
-    const videoTrack
-        = getTrackByMediaTypeAndParticipant(tracks, MEDIA_TYPE.VIDEO, id);
+    const audioTrack = getTrackByMediaTypeAndParticipant(tracks, MEDIA_TYPE.AUDIO, id);
+    const videoTrack = getTrackByMediaTypeAndParticipant(tracks, MEDIA_TYPE.VIDEO, id);
 
     return {
         _audioTrack: audioTrack,
@@ -283,4 +265,7 @@ function _mapStateToProps(state, ownProps) {
     };
 }
 
-export default connect(_mapStateToProps, _mapDispatchToProps)(Thumbnail);
+export default connect(
+    _mapStateToProps,
+    _mapDispatchToProps
+)(Thumbnail);

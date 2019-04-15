@@ -6,10 +6,7 @@ import { Text, View } from 'react-native';
 import { Avatar } from '../../avatar';
 import { translate } from '../../i18n';
 import { JitsiParticipantConnectionStatus } from '../../lib-jitsi-meet';
-import {
-    MEDIA_TYPE,
-    VideoTrack
-} from '../../media';
+import { MEDIA_TYPE, VideoTrack } from '../../media';
 import { Container, TintedView } from '../../react';
 import { connect } from '../../redux';
 import { StyleType } from '../../styles';
@@ -118,7 +115,12 @@ type Props = {
     /**
      * Indicates whether zooming (pinch to zoom and/or drag) is enabled.
      */
-    zoomEnabled: boolean
+    zoomEnabled: boolean,
+
+    /**
+     * Indicates whether use or not default STC logo.
+     */
+    defaultLogo: boolean
 };
 
 /**
@@ -128,7 +130,6 @@ type Props = {
  * @extends Component
  */
 class ParticipantView extends Component<Props> {
-
     /**
      * Renders the connection status label, if appropriate.
      *
@@ -151,11 +152,7 @@ class ParticipantView extends Component<Props> {
             return null;
         }
 
-        const {
-            avatarSize,
-            _participantName: displayName,
-            t
-        } = this.props;
+        const { avatarSize, _participantName: displayName, t } = this.props;
 
         // XXX Consider splitting this component into 2: one for the large view
         // and one for the thumbnail. Some of these don't apply to both.
@@ -168,9 +165,7 @@ class ParticipantView extends Component<Props> {
             <View
                 pointerEvents = 'box-none'
                 style = { containerStyle }>
-                <Text style = { styles.connectionInfoText }>
-                    { t(messageKey, { displayName }) }
-                </Text>
+                <Text style = { styles.connectionInfoText }>{t(messageKey, { displayName })}</Text>
             </View>
         );
     }
@@ -191,15 +186,12 @@ class ParticipantView extends Component<Props> {
         } = this.props;
 
         // If the connection has problems, we will "tint" the video / avatar.
-        const connectionProblem
-            = connectionStatus !== JitsiParticipantConnectionStatus.ACTIVE;
-        const useTint
-            = connectionProblem || this.props.tintEnabled;
+        const connectionProblem = connectionStatus !== JitsiParticipantConnectionStatus.ACTIVE;
+        const useTint = connectionProblem || this.props.tintEnabled;
 
-        const testHintId
-            = this.props.testHintId
-                ? this.props.testHintId
-                : `org.jitsi.meet.Participant#${this.props.participantId}`;
+        const testHintId = this.props.testHintId
+            ? this.props.testHintId
+            : `org.jitsi.meet.Participant#${this.props.participantId}`;
 
         return (
             <Container
@@ -209,36 +201,34 @@ class ParticipantView extends Component<Props> {
                     ...this.props.style
                 }}
                 touchFeedback = { false }>
-
                 <TestHint
                     id = { testHintId }
                     onPress = { onPress }
                     value = '' />
 
-                { renderVideo
-                    && <VideoTrack
+                {renderVideo && (
+                    <VideoTrack
                         onPress = { onPress }
                         videoTrack = { videoTrack }
                         waitForVideoStarted = { false }
                         zOrder = { this.props.zOrder }
-                        zoomEnabled = { this.props.zoomEnabled } /> }
+                        zoomEnabled = { this.props.zoomEnabled } />
+                )}
 
-                { !renderVideo
-                    && <View style = { styles.avatarContainer }>
-                        <Avatar
-                            participantId = { this.props.participantId }
-                            size = { this.props.avatarSize } />
-                    </View> }
+                { !renderVideo && <View style = { styles.avatarContainer }>
+                    <Avatar
+                        defaultLogo = { this.props.defaultLogo }
+                        size = { this.props.avatarSize }
+                        uri = { '' } />
+                </View>}
 
-                { useTint
+                {useTint
 
                     // If the connection has problems, tint the video / avatar.
-                    && <TintedView
-                        style = {
-                            connectionProblem ? undefined : tintStyle } /> }
+                    && <TintedView style = { connectionProblem ? undefined : tintStyle } />
+                }
 
-                { this.props.useConnectivityInfoLabel
-                    && this._renderConnectionInfo(connectionStatus) }
+                {this.props.useConnectivityInfoLabel && this._renderConnectionInfo(connectionStatus)}
             </Container>
         );
     }
@@ -260,16 +250,10 @@ function _mapStateToProps(state, ownProps) {
     let participantName;
 
     return {
-        _connectionStatus:
-            connectionStatus
-                || JitsiParticipantConnectionStatus.ACTIVE,
+        _connectionStatus: connectionStatus || JitsiParticipantConnectionStatus.ACTIVE,
         _participantName: participantName,
         _renderVideo: shouldRenderParticipantVideo(state, participantId) && !disableVideo,
-        _videoTrack:
-            getTrackByMediaTypeAndParticipant(
-                state['features/base/tracks'],
-                MEDIA_TYPE.VIDEO,
-                participantId)
+        _videoTrack: getTrackByMediaTypeAndParticipant(state['features/base/tracks'], MEDIA_TYPE.VIDEO, participantId)
     };
 }
 
