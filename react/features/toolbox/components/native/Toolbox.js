@@ -13,7 +13,6 @@ import { isToolboxVisible } from '../../functions';
 import AudioMuteButton from '../AudioMuteButton';
 import HangupButton from '../HangupButton';
 
-import OverflowMenuButton from './OverflowMenuButton';
 import styles from './styles';
 import VideoMuteButton from '../VideoMuteButton';
 
@@ -140,7 +139,7 @@ class Toolbox extends Component<Props, State> {
      */
     _renderToolbar() {
         const { _styles } = this.props;
-        const { buttonStyles, buttonStylesBorderless, hangupButtonStyles, toggledButtonStyles } = _styles;
+        const { buttonStyles, hangupButtonStyles, toggledButtonStyles } = _styles;
 
         return (
             <View
@@ -153,9 +152,6 @@ class Toolbox extends Component<Props, State> {
                     styles = { hangupButtonStyles } />
                 <VideoMuteButton
                     styles = { buttonStyles }
-                    toggledStyles = { toggledButtonStyles } />
-                <OverflowMenuButton
-                    styles = { buttonStylesBorderless }
                     toggledStyles = { toggledButtonStyles } />
             </View>
         );
