@@ -27,7 +27,7 @@ type Props = {
     /**
      * List of participants to extract the name.
      */
-    _participants: [{ name: string }]
+    _participants: [{ name: string, local: boolean }]
 };
 
 /**
@@ -45,7 +45,10 @@ class NavigationBar extends Component<Props> {
             return null;
         }
 
-        const participantsNames = this.props._participants.map(p => p.name).join(', ');
+        const participantsNames = this.props._participants
+            .filter(p => !p.local)
+            .map(p => p.name)
+            .join(', ');
 
         return [
             <LinearGradient
@@ -66,7 +69,7 @@ class NavigationBar extends Component<Props> {
                     pointerEvents = 'box-none'
                     style = { styles.roomNameWrapper }>
                     <Text
-                        numberOfLines = { 2 }
+                        numberOfLines = { 1 }
                         style = { styles.roomName }>
                         {participantsNames}
                     </Text>
