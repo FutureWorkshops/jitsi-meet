@@ -96,4 +96,12 @@
     [self _onJitsiMeetViewDelegateEvent:@"CONFERENCE_WILL_JOIN" withData:data];
 }
 
+- (void)participantJoined:(NSDictionary *)data {
+    [self _onJitsiMeetViewDelegateEvent:@"PARTICIPANT_JOINED" withData:data];
+}
+
+- (void)hiddenParticipantJoined:(NSDictionary *)data {
+    [self _onJitsiMeetViewDelegateEvent:@"HIDDEN_PARTICIPANT_JOINED" withData:data];
+}
+
 @end

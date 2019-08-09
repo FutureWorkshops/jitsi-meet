@@ -55,4 +55,9 @@
  */
 - (void)enterPictureInPicture:(NSDictionary *)data;
 
+// Custom methods, both map Redux actions with the same name
+- (void)participantJoined:(NSDictionary *)data;
+
+- (void)hiddenParticipantJoined:(NSDictionary *)data;
+
 @end
