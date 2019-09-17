@@ -16,8 +16,6 @@ import { getTrackByMediaTypeAndParticipant } from '../../tracks';
 import { shouldRenderParticipantVideo } from '../functions';
 import styles from './styles';
 
-const _DEFAULT_SOURCE = require('../../../../../images/STClogo.png');
-
 /**
  * The type of the React {@link Component} props of {@link ParticipantView}.
  */
@@ -118,11 +116,6 @@ type Props = {
      * Indicates whether zooming (pinch to zoom and/or drag) is enabled.
      */
     zoomEnabled: boolean,
-
-    /**
-     * Indicates whether use or not default STC logo.
-     */
-    defaultLogo: boolean
 };
 
 /**
@@ -219,9 +212,8 @@ class ParticipantView extends Component<Props> {
 
                 { !renderVideo && <View style = { styles.avatarContainer }>
                     <Avatar
-                        defaultLogo = { this.props.defaultLogo }
-                        size = { this.props.avatarSize }
-                        uri = { _DEFAULT_SOURCE } />
+                        displayName = { this.props._participantName }
+                        size = { this.props.avatarSize } />
                 </View>}
 
                 {useTint

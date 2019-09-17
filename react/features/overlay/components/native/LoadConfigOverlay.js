@@ -1,7 +1,7 @@
 // @flow
 
 import React, { Component } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 
 import { ColorSchemeRegistry } from '../../../base/color-scheme';
 import { translate } from '../../../base/i18n';
@@ -63,13 +63,6 @@ class LoadConfigOverlay extends Component<Props> {
                             color = { _styles.indicatorColor }
                             size = 'large'
                             style = { styles.connectIndicator } />
-                        <Text
-                            style = { [
-                                styles.loadingOverlayText,
-                                _styles.loadingOverlayText
-                            ] }>
-                            { this.props.t('connectingOverlay.joiningRoom') }
-                        </Text>
                     </SafeAreaView>
                 </View>
             </OverlayFrame>

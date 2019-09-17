@@ -18,7 +18,7 @@ type Props = AbstractProps & {
     style?: StyleType
 };
 
-const DEFAULT_AVATAR = require('../../../../../../images/avatar.png');
+const DEFAULT_AVATAR = require('../../../../../../images/STClogo.png');
 
 /**
  * Implements a stateless avatar component that renders an avatar purely from what gets passed through
