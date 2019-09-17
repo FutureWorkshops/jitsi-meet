@@ -16,6 +16,8 @@ import { getTrackByMediaTypeAndParticipant } from '../../tracks';
 import { shouldRenderParticipantVideo } from '../functions';
 import styles from './styles';
 
+const _DEFAULT_SOURCE = require('../../../../../images/STClogo.png');
+
 /**
  * The type of the React {@link Component} props of {@link ParticipantView}.
  */
@@ -219,7 +221,7 @@ class ParticipantView extends Component<Props> {
                     <Avatar
                         defaultLogo = { this.props.defaultLogo }
                         size = { this.props.avatarSize }
-                        uri = { '' } />
+                        uri = { _DEFAULT_SOURCE } />
                 </View>}
 
                 {useTint
