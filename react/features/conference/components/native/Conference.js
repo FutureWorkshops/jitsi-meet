@@ -15,7 +15,6 @@ import {
 import { TestConnectionInfo } from '../../../base/testing';
 import { ConferenceNotification, isCalendarEnabled } from '../../../calendar-sync';
 import { Chat } from '../../../chat';
-import { DisplayNameLabel } from '../../../display-name';
 import {
     FILMSTRIP_SIZE,
     Filmstrip,
@@ -66,11 +65,6 @@ type Props = AbstractProps & {
      * @private
      */
     _filmstripVisible: boolean,
-
-    /**
-     * The ID of the participant currently on stage (if any)
-     */
-    _largeVideoParticipantId: string,
 
     /**
      * Whether Picture-in-Picture is enabled.
@@ -164,7 +158,6 @@ class Conference extends AbstractConference<Props, *> {
         const {
             _connecting,
             _filmstripVisible,
-            _largeVideoParticipantId,
             _reducedUI,
             _shouldDisplayTileView,
             _toolboxVisible
@@ -229,8 +222,6 @@ class Conference extends AbstractConference<Props, *> {
                     <Labels />
 
                     <Captions onPress = { this._onClick } />
-
-                    { _shouldDisplayTileView || <DisplayNameLabel participantId = { _largeVideoParticipantId } /> }
 
                     {/*
                       * The Toolbox is in a stacking layer below the Filmstrip.
@@ -420,11 +411,6 @@ function _mapStateToProps(state) {
          * Is {@code true} when the filmstrip is currently visible.
          */
         _filmstripVisible: isFilmstripVisible(state),
-
-        /**
-         * The ID of the participant currently on stage.
-         */
-        _largeVideoParticipantId: state['features/large-video'].participantId,
 
         /**
          * Whether Picture-in-Picture is enabled.
