@@ -6,7 +6,6 @@ import { connect } from '../../base/redux';
 import { createDeepLinkingPageEvent, sendAnalytics } from '../../analytics';
 import { translate } from '../../base/i18n';
 import { Platform } from '../../base/react';
-import { DialInSummary } from '../../invite';
 
 import { _TNS } from '../constants';
 import { generateDeepLinkingURL } from '../functions';
@@ -88,7 +87,7 @@ class DeepLinkingMobilePage extends Component<Props> {
      * @returns {ReactElement}
      */
     render() {
-        const { _room, t } = this.props;
+        const { t } = this.props;
         const { NATIVE_APP_NAME, SHOW_DEEP_LINKING_IMAGE } = interfaceConfig;
         const downloadButtonClassName
             = `${_SNS}__button ${_SNS}__button_primary`;
@@ -130,10 +129,6 @@ class DeepLinkingMobilePage extends Component<Props> {
                         { t(`${_TNS}.openApp`) }
                         {/* </button> */}
                     </a>
-                    <DialInSummary
-                        className = 'deep-linking-dial-in'
-                        clickableNumbers = { true }
-                        room = { _room } />
                 </div>
             </div>
         );
