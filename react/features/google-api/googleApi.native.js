@@ -1,13 +1,5 @@
 // @flow
 
-import { NativeModules } from 'react-native';
-
-let GoogleSignin;
-
-if (NativeModules.RNGoogleSignin) {
-    GoogleSignin = require('react-native-google-signin').GoogleSignin;
-}
-
 import {
     API_URL_BROADCAST_STREAMS,
     API_URL_LIVE_BROADCASTS
@@ -22,27 +14,6 @@ import {
  * https://github.com/react-native-community/react-native-google-signin.
  */
 class GoogleApi {
-    /**
-     * Wraps the {@code GoogleSignin.configure} method.
-     *
-     * @param {Object} config - The config object to be passed to
-     * {@code GoogleSignin.configure}.
-     * @returns {void}
-     */
-    configure(config: Object) {
-        if (GoogleSignin) {
-            GoogleSignin.configure(config);
-        }
-    }
-
-    /**
-     * Retrieves the current tokens.
-     *
-     * @returns {Promise}
-     */
-    getTokens(): Promise<*> {
-        return GoogleSignin.getTokens();
-    }
 
     /**
      * Retrieves the available YouTube streams the user can use for live
@@ -65,46 +36,6 @@ class GoogleApi {
                     accessToken, broadcasts).then(resolve, reject);
             }, reject);
         });
-    }
-
-    /**
-     * Wraps the {@code GoogleSignin.hasPlayServices} method.
-     *
-     * @returns {Promise<*>}
-     */
-    hasPlayServices() {
-        if (!GoogleSignin) {
-            return Promise.reject(new Error('Google SignIn not supported'));
-        }
-
-        return GoogleSignin.hasPlayServices();
-    }
-
-    /**
-     * Wraps the {@code GoogleSignin.signIn} method.
-     *
-     * @returns {Promise<*>}
-     */
-    signIn() {
-        return GoogleSignin.signIn();
-    }
-
-    /**
-     * Wraps the {@code GoogleSignin.signInSilently} method.
-     *
-     * @returns {Promise<*>}
-     */
-    signInSilently() {
-        return GoogleSignin.signInSilently();
-    }
-
-    /**
-     * Wraps the {@code GoogleSignin.signOut} method.
-     *
-     * @returns {Promise<*>}
-     */
-    signOut() {
-        return GoogleSignin.signOut();
     }
 
     /**

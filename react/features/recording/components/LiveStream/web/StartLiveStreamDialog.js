@@ -9,12 +9,10 @@ import { connect } from '../../../../base/redux';
 
 import {
     GOOGLE_API_STATES,
-    GoogleSignInButton,
     loadGoogleAPI,
     requestAvailableYouTubeBroadcasts,
     requestLiveStreamsForYouTubeBroadcast,
     showAccountSelection,
-    signIn,
     updateProfile
 } from '../../../../google-api';
 
@@ -56,7 +54,6 @@ class StartLiveStreamDialog
         // Bind event handlers so they are only bound once per instance.
         this._onGetYouTubeBroadcasts = this._onGetYouTubeBroadcasts.bind(this);
         this._onInitializeGoogleApi = this._onInitializeGoogleApi.bind(this);
-        this._onGoogleSignIn = this._onGoogleSignIn.bind(this);
         this._onRequestGoogleSignIn = this._onRequestGoogleSignIn.bind(this);
         this._onYouTubeBroadcastIDSelected
             = this._onYouTubeBroadcastIDSelected.bind(this);
@@ -168,20 +165,6 @@ class StartLiveStreamDialog
             .catch(response => this._parseErrorFromResponse(response));
     }
 
-    _onGoogleSignIn: () => Object;
-
-    /**
-     * Forces the Google web client application to prompt for a sign in, such as
-     * when changing account, and will then fetch available YouTube broadcasts.
-     *
-     * @private
-     * @returns {Promise}
-     */
-    _onGoogleSignIn() {
-        this.props.dispatch(signIn())
-            .catch(response => this._parseErrorFromResponse(response));
-    }
-
     _onRequestGoogleSignIn: () => Object;
 
     /**
@@ -273,10 +256,6 @@ class StartLiveStreamDialog
 
         switch (this.props._googleAPIState) {
         case GOOGLE_API_STATES.LOADED:
-            googleContent
-                = <GoogleSignInButton onClick = { this._onGoogleSignIn } />;
-            helpText = t('liveStreaming.signInCTA');
-
             break;
 
         case GOOGLE_API_STATES.SIGNED_IN:
@@ -322,14 +301,6 @@ class StartLiveStreamDialog
             );
 
             break;
-        }
-
-        if (this.state.errorType !== undefined) {
-            googleContent = (
-                <GoogleSignInButton
-                    onClick = { this._onRequestGoogleSignIn } />
-            );
-            helpText = this._getGoogleErrorMessageToDisplay();
         }
 
         return (
