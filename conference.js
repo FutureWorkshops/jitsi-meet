@@ -122,6 +122,7 @@ const logger = require('jitsi-meet-logger').getLogger(__filename);
 const eventEmitter = new EventEmitter();
 
 let room;
+
 let connection;
 
 /*
