@@ -151,10 +151,6 @@ module.exports = [
             'alwaysontop':
                 './react/features/always-on-top/index.js',
 
-            'dial_in_info_bundle': [
-                './react/features/invite/components/dial-in-info-page'
-            ],
-
             'do_external_connect':
                 './connection_optimization/do_external_connect.js',
 

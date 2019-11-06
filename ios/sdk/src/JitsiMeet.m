@@ -23,8 +23,6 @@
 #import "RCTBridgeWrapper.h"
 #import "ReactUtils.h"
 
-#import <RNGoogleSignin/RNGoogleSignin.h>
-
 
 @implementation JitsiMeet {
     RCTBridgeWrapper *_bridgeWrapper;
@@ -85,13 +83,6 @@
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
 
     if ([Dropbox application:app openURL:url options:options]) {
-        return YES;
-    }
-
-    if ([RNGoogleSignin application:app
-                            openURL:url
-                  sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
-                         annotation:options[UIApplicationOpenURLOptionsAnnotationKey]]) {
         return YES;
     }
 
